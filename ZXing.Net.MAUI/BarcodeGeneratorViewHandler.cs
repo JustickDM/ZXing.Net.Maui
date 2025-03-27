@@ -1,16 +1,16 @@
-using System;
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Handlers;
+
+using System.Linq;
 
 namespace ZXing.Net.Maui
 {
 	public partial class BarcodeGeneratorViewHandler : ViewHandler<IBarcodeGeneratorView, NativePlatformImageView>
 	{
-		Size desiredSize;
-		BarcodeWriter writer;
+		private Size _desiredSize;
+		private BarcodeWriter _writer;
+		private NativePlatformImageView _imageView;
 
 		public static PropertyMapper<IBarcodeGeneratorView, BarcodeGeneratorViewHandler> BarcodeGeneratorViewMapper = new()
 		{
@@ -23,12 +23,12 @@ namespace ZXing.Net.Maui
 
 		public BarcodeGeneratorViewHandler() : base(BarcodeGeneratorViewMapper)
 		{
-			writer = new BarcodeWriter();
+			_writer = new BarcodeWriter();
 		}
 
 		public BarcodeGeneratorViewHandler(PropertyMapper mapper = null) : base(mapper ?? BarcodeGeneratorViewMapper)
 		{
-			writer = new BarcodeWriter();
+			_writer = new BarcodeWriter();
 		}
 
 		public override void PlatformArrange(Rect rect)
@@ -36,27 +36,25 @@ namespace ZXing.Net.Maui
 			base.PlatformArrange(rect);
 
 			// Don't update if it's the same size, otherwise we could infinite loop
-			if (desiredSize.Width == rect.Width && desiredSize.Height == rect.Height)
+			if (_desiredSize.Width == rect.Width && _desiredSize.Height == rect.Height)
 				return;
 
-			desiredSize = rect.Size;
+			_desiredSize = rect.Size;
 
 			UpdateBarcode();
 		}
 
-		NativePlatformImageView imageView;
-
 		protected override NativePlatformImageView CreatePlatformView()
 		{
 #if IOS || MACCATALYST
-			imageView ??= new UIKit.UIImageView { BackgroundColor = UIKit.UIColor.Clear };
+			_imageView ??= new UIKit.UIImageView { BackgroundColor = UIKit.UIColor.Clear };
 #elif ANDROID
-			imageView = new NativePlatformImageView(Context);
-			imageView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+			_imageView = new NativePlatformImageView(Context);
+			_imageView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 #elif WINDOWS
-			imageView = new NativePlatformImageView();
+			_imageView = new NativePlatformImageView();
 #endif
-			return imageView;
+			return _imageView;
 		}
 
 		protected override void ConnectHandler(NativePlatformImageView nativeView)
@@ -68,23 +66,25 @@ namespace ZXing.Net.Maui
 
 		void UpdateBarcode()
 		{
-			writer.Format = VirtualView.Format.ToZXingList().FirstOrDefault();
-			writer.Options.Width = (int)desiredSize.Width;
-			writer.Options.Height = (int)desiredSize.Height;
-			writer.Options.Margin = VirtualView.BarcodeMargin;
-			writer.ForegroundColor = VirtualView.ForegroundColor;
-			writer.BackgroundColor = VirtualView.BackgroundColor;
+			_writer.Format = VirtualView.Format.ToZXingList().FirstOrDefault();
+			_writer.Options.Width = (int)_desiredSize.Width;
+			_writer.Options.Height = (int)_desiredSize.Height;
+			_writer.Options.Margin = VirtualView.BarcodeMargin;
+			_writer.ForegroundColor = VirtualView.ForegroundColor;
+			_writer.BackgroundColor = VirtualView.BackgroundColor;
+			_writer.Options.Hints[EncodeHintType.CHARACTER_SET] = VirtualView.EncodingName;
 
 			NativePlatformImage image = null;
+
 			if (!string.IsNullOrEmpty(VirtualView.Value))
-				image = writer?.Write(VirtualView.Value);
+				image = _writer?.Write(VirtualView.Value);
 
 #if IOS || MACCATALYST
-			imageView.Image = image;
+			_imageView.Image = image;
 #elif ANDROID
-			imageView?.SetImageBitmap(image);
+			_imageView?.SetImageBitmap(image);
 #elif WINDOWS
-			imageView.Source = image;
+			_imageView.Source = image;
 #endif
 		}
 

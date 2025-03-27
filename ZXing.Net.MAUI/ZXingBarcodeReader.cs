@@ -1,30 +1,29 @@
-﻿using Microsoft.Maui.Graphics;
-
-namespace ZXing.Net.Maui.Readers
+﻿namespace ZXing.Net.Maui.Readers
 {
 	public class ZXingBarcodeReader : Readers.IBarcodeReader
 	{
-		BarcodeReaderGeneric zxingReader;
+		private BarcodeReaderGeneric _zxingReader;
+		private BarcodeReaderOptions _options;
 
 		public ZXingBarcodeReader()
 		{
-			zxingReader = new BarcodeReaderGeneric();
+			_zxingReader = new BarcodeReaderGeneric();
 		}
 
-		BarcodeReaderOptions options;
 		public BarcodeReaderOptions Options
 		{
 
-			get => options ??= new BarcodeReaderOptions();
+			get => _options ??= new BarcodeReaderOptions();
 			set
 			{
-				options = value ?? new BarcodeReaderOptions();
-				zxingReader.Options.PossibleFormats = options.Formats.ToZXingList();
-				zxingReader.Options.TryHarder = options.TryHarder;
-				zxingReader.AutoRotate = options.AutoRotate;
-				zxingReader.Options.TryInverted = options.TryInverted;
-				zxingReader.Options.UseCode39ExtendedMode = options.UseCode39ExtendedMode;
-            }
+				_options = value ?? new BarcodeReaderOptions();
+				_zxingReader.Options.PossibleFormats = _options.Formats.ToZXingList();
+				_zxingReader.Options.CharacterSet = _options.EncodingName;
+				_zxingReader.AutoRotate = _options.AutoRotate;
+				_zxingReader.Options.TryHarder = _options.TryHarder;
+				_zxingReader.Options.TryInverted = _options.TryInverted;
+				_zxingReader.Options.UseCode39ExtendedMode = _options.UseCode39ExtendedMode;
+			}
 		}
 
 		public BarcodeResult[] Decode(PixelBufferHolder image)
@@ -43,11 +42,12 @@ namespace ZXing.Net.Maui.Readers
 #endif
 
 			if (Options.Multiple)
-				return zxingReader.DecodeMultiple(ls)?.ToBarcodeResults();
+				return _zxingReader.DecodeMultiple(ls)?.ToBarcodeResults();
 
-			var b = zxingReader.Decode(ls)?.ToBarcodeResult();
-			if (b != null)
-				return new[] { b };
+			var result = _zxingReader.Decode(ls)?.ToBarcodeResult();
+
+			if (result is not null)
+				return [result];
 
 			return null;
 		}

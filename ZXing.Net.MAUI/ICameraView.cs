@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.Maui;
+﻿using Microsoft.Maui;
 using Microsoft.Maui.Graphics;
-using System;
 
 namespace ZXing.Net.Maui
 {
@@ -16,10 +14,10 @@ namespace ZXing.Net.Maui
 
 		//CameraMode Mode { get; set; }
 
+		bool IsTorchOn { get; set; }
+
 		void AutoFocus();
 
 		void Focus(Point point);
-
-		bool IsTorchOn { get; set; }
 	}
 }

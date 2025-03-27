@@ -22,12 +22,7 @@ global using NativePlatformImage = ZXing.Net.Maui.NativePlatformImage;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Hosting;
-using Microsoft.Maui;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 namespace ZXing.Net.Maui
 {
 	public static class MauiHostBuilderExtensions
@@ -46,7 +41,8 @@ namespace ZXing.Net.Maui
 			return builder;
 		}
 
-		public static MauiAppBuilder UseBarcodeReader<TBarcodeReader>(this MauiAppBuilder builder) where TBarcodeReader : class, Readers.IBarcodeReader
+		public static MauiAppBuilder UseBarcodeReader<TBarcodeReader>(this MauiAppBuilder builder)
+			where TBarcodeReader : class, Readers.IBarcodeReader
 		{
 			builder.ConfigureMauiHandlers(handlers =>
 			{
@@ -59,6 +55,5 @@ namespace ZXing.Net.Maui
 
 			return builder;
 		}
-
 	}
 }

@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Graphics;
 
@@ -15,5 +14,7 @@ namespace ZXing.Net.Maui
 		Color BackgroundColor { get; }
 
 		int BarcodeMargin { get; }
+
+		string EncodingName { get; }
 	}
 }

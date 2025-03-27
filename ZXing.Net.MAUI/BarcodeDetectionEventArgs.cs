@@ -4,12 +4,11 @@ namespace ZXing.Net.Maui
 {
 	public class BarcodeDetectionEventArgs : EventArgs
 	{
-		public BarcodeDetectionEventArgs(BarcodeResult[] results)
-			: base()
+		public BarcodeResult[] Results { get; private set; }
+
+		public BarcodeDetectionEventArgs(BarcodeResult[] results) : base()
 		{
 			Results = results;
 		}
-
-		public BarcodeResult[] Results { get; private set; }
 	}
 }

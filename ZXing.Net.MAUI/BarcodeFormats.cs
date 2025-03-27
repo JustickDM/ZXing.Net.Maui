@@ -47,8 +47,8 @@ namespace ZXing.Net.Maui
 			| BarcodeFormat.Msi
 			| BarcodeFormat.Plessey
 			| BarcodeFormat.Imb;
-			// Seems to have a lot of false positives, so leave it out of this group
-			//| BarcodeFormat.PharmaCode;
+		// Seems to have a lot of false positives, so leave it out of this group
+		//| BarcodeFormat.PharmaCode;
 
 		public static BarcodeFormat All =>
 			BarcodeFormat.Aztec
@@ -71,7 +71,7 @@ namespace ZXing.Net.Maui
 			| BarcodeFormat.Msi
 			| BarcodeFormat.Plessey
 			| BarcodeFormat.Imb;
-			// Seems to have a lot of false positives, so leave it out of this group
-			//| BarcodeFormat.PharmaCode;
-    }
+		// Seems to have a lot of false positives, so leave it out of this group
+		//| BarcodeFormat.PharmaCode;
+	}
 }

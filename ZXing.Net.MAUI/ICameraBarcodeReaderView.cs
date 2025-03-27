@@ -1,9 +1,4 @@
-﻿using System;
-using Microsoft.Maui;
-using Microsoft.Maui.Graphics;
-using ZXing.Net.Maui.Readers;
-
-namespace ZXing.Net.Maui
+﻿namespace ZXing.Net.Maui
 {
 	public interface ICameraBarcodeReaderView : ICameraView
 	{
