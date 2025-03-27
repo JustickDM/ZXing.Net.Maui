@@ -2,7 +2,7 @@
 {
 	public record BarcodeReaderOptions
 	{
-		public BarcodeFormat Formats { get; init; }
+		public BarcodeFormat Formats { get; init; } = BarcodeFormats.All;
 
 		public string EncodingName { get; init; } = "UTF8";
 

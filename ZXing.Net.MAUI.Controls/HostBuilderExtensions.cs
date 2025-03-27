@@ -55,6 +55,5 @@ namespace ZXing.Net.Maui.Controls
 
 			return builder;
 		}
-
 	}
 }
